@@ -123,8 +123,10 @@ function keepLiving(i, j) {
 
 function checkGameOver() {
     if (gGame.shownCount === gLevel.size ** 2 && gGame.markedCount === gLevel.mine) {
+        elButton.innerText = WIN
         return true
     } else if (gGame.shownCount === gLevel.size ** 2 && gGame.lives < LIVES) {
+        elButton.innerText = WIN
         return true
     }
     console.log('gGame.shownCount ', gGame.shownCount);
@@ -137,5 +139,6 @@ function checkGameOver() {
 
 function gameOver() {
     gGame.isOn = false
+    elButton.innerText = SAD
 }
 

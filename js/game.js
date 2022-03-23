@@ -1,11 +1,15 @@
 'use strict'
 
 const LIVES = 3
+const NORMAL = '😀'
+const SAD = '😵'
+const WIN = '😎'
 
 var gBoard;
 var gAllPositions = []
 var elFlagCounter = document.querySelector('.flagCounter')
 var elLivesCounter = document.querySelector('.livesCounter')
+var elButton = document.querySelector('button')
 var elTime = document.querySelector('.timer')
 var gTimeInterval;
 
@@ -29,6 +33,7 @@ function init() {
     gGame.secsPassed = 0
     gGame.lives = LIVES
     gAllPositions = []
+    elButton.innerText = NORMAL
     elFlagCounter.innerText = 'Flag: ' + gLevel.mine
     elLivesCounter.innerText = 'Lives: ' + gGame.lives
     elTime.innerText = 'Time: 0.00'
