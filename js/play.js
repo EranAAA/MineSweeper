@@ -10,7 +10,7 @@ var gTimer
 
 function cellClicked(evBtn, elCell, i, j) {
     if (!gGame.isOn) return
-
+    if (gBoard[i][j].isShown && gBoard[i][j].isShown) return
     if (!gGame.shownCount) {
         placeTheMines(gLevel.mine, i, j)
         setMinesNegsCount(gBoard)
@@ -25,11 +25,11 @@ function cellClicked(evBtn, elCell, i, j) {
     if (elCell.innerText === FLAG) { gGame.shownCount--; return }
 
     if (gBoard[i][j].isMine) {
+        if (gGame.lives) return keepLiving(i, j)
         // Update Model
         gBoard[i][j].isShown = true
         // Update DOM
         renderCell({ i: i, j: j }, EXPLODE, 'showCell')
-        elCell.classList.add('showCell')
 
         showAllMines(i, j)
         return gameOver()
@@ -51,6 +51,7 @@ function cellClicked(evBtn, elCell, i, j) {
     console.log(gGame);
     if (checkGameOver()) {
         gGame.isOn = false
+        console.log('WINNER');
     }
 }
 
@@ -71,6 +72,7 @@ function cellMarked(elCell, i, j) {
 
     if (checkGameOver()) {
         gGame.isOn = false
+        console.log('WINNER');
     }
 
 
@@ -110,15 +112,27 @@ function showCellsAround(i, j) {
     }
 }
 
+function keepLiving(i, j) {
+    gGame.lives--
+    // Update Model
+    gBoard[i][j].isShown = true
+    // Update DOM
+    renderCell({ i: i, j: j }, MINE, 'showCell')
+    elLivesCounter.innerText = 'Lives: ' + gGame.lives
+}
+
 function checkGameOver() {
-    var firstCondition = gGame.shownCount === gLevel.size ** 2
-    var secondCondition = gGame.markedCount === gLevel.mine
+    if (gGame.shownCount === gLevel.size ** 2 && gGame.markedCount === gLevel.mine) {
+        return true
+    } else if (gGame.shownCount === gLevel.size ** 2 && gGame.lives < LIVES) {
+        return true
+    }
     console.log('gGame.shownCount ', gGame.shownCount);
     console.log('gLevel.size ** 2 ', gLevel.size ** 2);
     console.log('gGame.markedCount ', gGame.markedCount);
     console.log('gLevel.mine', gLevel.mine);
-
-    return firstCondition && secondCondition
+    console.log('gGame.lives ', gGame.lives);
+    console.log('LIVES', LIVES);
 }
 
 function gameOver() {

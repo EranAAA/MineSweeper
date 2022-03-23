@@ -13,19 +13,36 @@
     <form>
       <p>Chose your level!</p>
       <div>
-        <input id="inputEasy" onclick="changeBoard(4,2)" type="radio" name="contact" />
+        <input
+          id="inputEasy"
+          onclick="changeBoard(4,2)"
+          type="radio"
+          name="contact"
+        />
         <label for="choice1">Easy</label>
 
-        <input id="inputHard" onclick="changeBoard(8,12)" type="radio" name="contact" checked/>
+        <input
+          id="inputHard"
+          onclick="changeBoard(8,12)"
+          type="radio"
+          name="contact"
+          checked
+        />
         <label for="choice2">Hard</label>
 
-        <input id="inputExtream" onclick="changeBoard(12,30)" type="radio" name="contact"/>
+        <input
+          id="inputExtream"
+          onclick="changeBoard(12,30)"
+          type="radio"
+          name="contact"
+        />
         <label for="choice3">Extream</label>
       </div>
     </form>
 
-
-    <div class="flagCounter">Flag</div>
+    <div class="panel">
+      <div class="flagCounter">Flag</div>
+      <div class="livesCounter">Lives</div>
       <button onclick="init()">😀</button>
       <div class="timer">Timer</div>
     </div>

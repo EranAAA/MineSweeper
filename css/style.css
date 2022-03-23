@@ -5,23 +5,24 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.panel-container {
+label {
+  margin-right: 20px;
+}
+
+.panel {
   margin: auto;
   background-color: lightskyblue;
   height: 60px;
 }
 
 .flagCounter,
-.timer {
+.timer,
+.livesCounter {
   display: inline-block;
   font-size: 18px;
   /* margin-right: 120px; */
   height: 40px;
   width: 40px;
-}
-
-label {
-  margin-right: 20px;
 }
 
 button {

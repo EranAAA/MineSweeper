@@ -1,8 +1,11 @@
 'use strict'
 
+const LIVES = 3
+
 var gBoard;
 var gAllPositions = []
 var elFlagCounter = document.querySelector('.flagCounter')
+var elLivesCounter = document.querySelector('.livesCounter')
 var elTime = document.querySelector('.timer')
 var gTimeInterval;
 
@@ -15,7 +18,8 @@ var gGame = {
     isOn: false,
     shownCount: 0,
     markedCount: 0,
-    secsPassed: 0
+    secsPassed: 0,
+    lives: LIVES
 }
 
 function init() {
@@ -23,7 +27,10 @@ function init() {
     gGame.shownCount = 0
     gGame.markedCount = 0
     gGame.secsPassed = 0
+    gGame.lives = LIVES
+    gAllPositions = []
     elFlagCounter.innerText = 'Flag: ' + gLevel.mine
+    elLivesCounter.innerText = 'Lives: ' + gGame.lives
     elTime.innerText = 'Time: 0.00'
     gBoard = buildBoard(gLevel);
     renderBoard(gBoard, '.board-container');
@@ -90,7 +97,6 @@ function placeTheMines(level, rowIgn, colIgn) {
         var randomNum = getRandomInt(0, gAllPositions.length)
         var randomPosition = gAllPositions[randomNum]
         if (randomPosition.i === rowIgn && randomPosition.j === colIgn) { i--; continue }
-
         gBoard[randomPosition.i][randomPosition.j].isMine = true
         gAllPositions.splice(randomNum, 1)
     }
