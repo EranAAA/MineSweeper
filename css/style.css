@@ -1,0 +1,61 @@
+body {
+  margin: auto;
+  text-align: center;
+  background-color: lightskyblue;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.panel-container {
+  margin: auto;
+  background-color: lightskyblue;
+  height: 60px;
+}
+
+.flagCounter,
+.timer {
+  display: inline-block;
+  font-size: 18px;
+  /* margin-right: 120px; */
+  height: 40px;
+  width: 40px;
+}
+
+label {
+  margin-right: 20px;
+}
+
+button {
+  /* display: inline-block; */
+  height: 40px;
+  width: 40px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+table {
+  margin: auto;
+}
+
+td {
+  background-color: lightgray;
+  height: 40px;
+  width: 40px;
+  border: 1px solid black;
+}
+
+td:hover {
+  background-color: lightslategrey;
+  cursor: pointer;
+}
+
+.showCell {
+  background-color: white;
+}
+
+.hideCell {
+  background-color: lightgray;
+}
+
+footer {
+  padding-top: 10px;
+}

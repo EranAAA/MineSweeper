@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mine Sweeper</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body onload="init()" oncontextmenu="return false;">
+    <h1>Mine Sweeper</h1>
+
+    <form>
+      <p>Chose your level!</p>
+      <div>
+        <input id="inputEasy" onclick="changeBoard(4,2)" type="radio" name="contact" />
+        <label for="choice1">Easy</label>
+
+        <input id="inputHard" onclick="changeBoard(8,12)" type="radio" name="contact" checked/>
+        <label for="choice2">Hard</label>
+
+        <input id="inputExtream" onclick="changeBoard(12,30)" type="radio" name="contact"/>
+        <label for="choice3">Extream</label>
+      </div>
+    </form>
+
+
+    <div class="flagCounter">Flag</div>
+      <button onclick="init()">😀</button>
+      <div class="timer">Timer</div>
+    </div>
+
+    <div class="board-container"></div>
+
+    <script src="js/game.js"></script>
+    <script src="js/play.js"></script>
+    <script src="js/util.js"></script>
+  </body>
+  <footer>Eran Avichzer / ערן אביכזר</footer>
+</html>
