@@ -17,7 +17,8 @@ label {
 
 .flagCounter,
 .timer,
-.livesCounter {
+.livesCounter,
+.hintCounter {
   display: inline-block;
   font-size: 18px;
   /* margin-right: 120px; */

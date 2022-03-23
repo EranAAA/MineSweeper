@@ -1,6 +1,8 @@
 'use strict'
 
 const LIVES = 3
+const HINTS = 3
+
 const NORMAL = '😀'
 const SAD = '😵'
 const WIN = '😎'
@@ -9,7 +11,9 @@ var gBoard;
 var gAllPositions = []
 var elFlagCounter = document.querySelector('.flagCounter')
 var elLivesCounter = document.querySelector('.livesCounter')
+var elHintsCounter = document.querySelector('.hintCounter')
 var elButton = document.querySelector('button')
+var elButtonHint = document.querySelector('.hints')
 var elTime = document.querySelector('.timer')
 var gTimeInterval;
 
@@ -23,7 +27,9 @@ var gGame = {
     shownCount: 0,
     markedCount: 0,
     secsPassed: 0,
-    lives: LIVES
+    lives: LIVES,
+    hints: HINTS,
+    isHint: false
 }
 
 function init() {
@@ -36,6 +42,8 @@ function init() {
     elButton.innerText = NORMAL
     elFlagCounter.innerText = 'Flag: ' + gLevel.mine
     elLivesCounter.innerText = 'Lives: ' + gGame.lives
+    elHintsCounter.innerText = 'Hints: ' + gGame.hints
+
     elTime.innerText = 'Time: 0.00'
     gBoard = buildBoard(gLevel);
     renderBoard(gBoard, '.board-container');

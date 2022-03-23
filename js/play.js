@@ -10,12 +10,15 @@ var gTimer
 
 function cellClicked(evBtn, elCell, i, j) {
     if (!gGame.isOn) return
-    if (gBoard[i][j].isShown && gBoard[i][j].isShown) return
+
     if (!gGame.shownCount) {
         placeTheMines(gLevel.mine, i, j)
         setMinesNegsCount(gBoard)
         printBoard(gBoard)
     }
+    if (gGame.isHint) return hintShow(i, j)
+    if (gBoard[i][j].isShown && gBoard[i][j].isMine) return
+
     if (!gBoard[i][j].isShown) gGame.shownCount++
 
     gGame.secsPassed = (gGame.secsPassed) ? gGame.secsPassed : Date.now()
@@ -119,6 +122,47 @@ function keepLiving(i, j) {
     // Update DOM
     renderCell({ i: i, j: j }, MINE, 'showCell')
     elLivesCounter.innerText = 'Lives: ' + gGame.lives
+}
+
+function hint() {
+    if (gGame.isHint) return
+    gGame.isHint = true
+    gGame.hints--
+    elHintsCounter.innerText = 'Hints: ' + gGame.hints
+    elButtonHint.style.background = 'yellow'
+}
+
+function hintShow(i, j) {
+    var hintCells = getNeighbors(gBoard, i, j)
+
+    for (const cell of hintCells) {
+        if (gBoard[cell.i][cell.j].isShown) {
+            continue
+        } else if (gBoard[cell.i][cell.j].isMine) {
+            renderCell({ i: cell.i, j: cell.j }, MINE, 'showCell')
+        } else {
+            renderCell({ i: cell.i, j: cell.j }, gBoard[cell.i][cell.j].minesAroundCount, 'showCell')
+        }
+    }
+
+    setTimeout(() => {
+        for (const cell of hintCells) {
+            if (gBoard[cell.i][cell.j].isShown) {
+                continue
+            } else if (gBoard[cell.i][cell.j].isMine) {
+                renderCell({ i: cell.i, j: cell.j }, WINDOW, 'hideCell')
+            } else {
+                renderCell({ i: cell.i, j: cell.j }, WINDOW, 'hideCell')
+            }
+        }
+        elButtonHint.style.background = ''
+
+        //debugger
+
+        gGame.isHint = false
+    }, 1000);
+
+
 }
 
 function checkGameOver() {
