@@ -8,22 +8,22 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body onload="init()" oncontextmenu="return false;">
-    <h1>Mine Sweeper</h1>
+    <h1>Mine💣Sweeper</h1>
 
     <form>
       <p>Chose your level!</p>
-      <div>
+      <div class="levelDiv">
         <input
-          id="inputEasy"
-          onclick="changeBoard(4,2)"
+          id="Easy"
+          onclick="changeBoard(4,2,'Easy')"
           type="radio"
           name="contact"
         />
         <label for="choice1">Easy</label>
 
         <input
-          id="inputHard"
-          onclick="changeBoard(8,12)"
+          id="Hard"
+          onclick="changeBoard(8,12,'Hard')"
           type="radio"
           name="contact"
           checked
@@ -31,8 +31,8 @@
         <label for="choice2">Hard</label>
 
         <input
-          id="inputExtream"
-          onclick="changeBoard(12,30)"
+          id="Extream"
+          onclick="changeBoard(12,30,'Extream')"
           type="radio"
           name="contact"
         />
@@ -44,10 +44,15 @@
       <div class="flagCounter">Flag</div>
       <div class="livesCounter">Lives</div>
       <div class="hintCounter">Hints</div>
-
-      <button onclick="init()">😀</button>
-      <button onclick="hint()" class="hints">🕵️</button>
+      <div class="safeCounter">safe</div>
+      <br />
       <div class="timer">Timer</div>
+      <div class="bestScore">score</div>
+      <br />
+      <button onclick="hint()" class="hintsBtn">🕵️</button>
+      <button onclick="init()" class="restartBtn">😀</button>
+      <button onclick="safeCheck()" class="safeCheckBtn">🦺</button>
+      <button onclick="undo()" class="undoBtn">⏪</button>
     </div>
 
     <div class="board-container"></div>

@@ -2,6 +2,7 @@
 
 const LIVES = 3
 const HINTS = 3
+const SAFE_CHECK = 3
 
 const NORMAL = '😀'
 const SAD = '😵'
@@ -9,12 +10,24 @@ const WIN = '😎'
 
 var gBoard;
 var gAllPositions = []
-var elFlagCounter = document.querySelector('.flagCounter')
-var elLivesCounter = document.querySelector('.livesCounter')
-var elHintsCounter = document.querySelector('.hintCounter')
-var elButton = document.querySelector('button')
-var elButtonHint = document.querySelector('.hints')
-var elTime = document.querySelector('.timer')
+var gElFlagCounter = document.querySelector('.flagCounter')
+var gElLivesCounter = document.querySelector('.livesCounter')
+var gElHintsCounter = document.querySelector('.hintCounter')
+var gElSafeCounter = document.querySelector('.safeCounter')
+var gElScoreRecord = document.querySelector('.bestScore')
+
+var gCurrnetLevel = 'Hard'
+
+var gElButton = document.querySelector('.restartBtn')
+var gElButtonHint = document.querySelector('.hintsBtn')
+var gElButtonSafeCheck = document.querySelector('.safeCheckBtn')
+var gElButtonUndo = document.querySelector('.undoBtn')
+
+var gElTime = document.querySelector('.timer')
+
+var gUndo = []
+var gUndoProperties = []
+var gTime;
 var gTimeInterval;
 
 var gLevel = {
@@ -29,7 +42,8 @@ var gGame = {
     secsPassed: 0,
     lives: LIVES,
     hints: HINTS,
-    isHint: false
+    isHint: false,
+    safeCheck: SAFE_CHECK,
 }
 
 function init() {
@@ -38,28 +52,37 @@ function init() {
     gGame.markedCount = 0
     gGame.secsPassed = 0
     gGame.lives = LIVES
+    gGame.hints = HINTS
+    gGame.isHint = false
+    gGame.safeCheck = SAFE_CHECK
     gAllPositions = []
-    elButton.innerText = NORMAL
-    elFlagCounter.innerText = 'Flag: ' + gLevel.mine
-    elLivesCounter.innerText = 'Lives: ' + gGame.lives
-    elHintsCounter.innerText = 'Hints: ' + gGame.hints
 
-    elTime.innerText = 'Time: 0.00'
+    gElButton.innerText = NORMAL
+    gElFlagCounter.innerText = 'Flag: ' + gLevel.mine
+    gElLivesCounter.innerText = 'Lives: ' + gGame.lives
+    gElHintsCounter.innerText = 'Hints: ' + gGame.hints
+    gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
+    gElScoreRecord.innerText = '// Best: ' + setBest()
+    gElButtonHint.style.background = ''
+    gElTime.innerText = 'Time: 0.00'
+
+    gUndoProperties[0] = gGame
+
     gBoard = buildBoard(gLevel);
     renderBoard(gBoard, '.board-container');
     clearAllInterval()
 }
 
-function changeBoard(size, mine) {
+function changeBoard(size, mine, level) {
+    gCurrnetLevel = level
     gLevel.size = size
     gLevel.mine = mine
     init();
-
 }
 
 function createCell() {
     return {
-        minesAroundCount: 0, // 4
+        minesAroundCount: 0,
         isShown: false,
         isMine: false,
         isMarked: false
@@ -102,6 +125,8 @@ function renderCell(location, value, classAdded) {
     elCell.innerText = value;
     elCell.classList.remove('showCell')
     elCell.classList.remove('hideCell')
+    elCell.classList.remove('markCell')
+
     if (classAdded) elCell.classList.add(classAdded)
 }
 
@@ -124,14 +149,15 @@ function setMinesNegsCount(board) {
 }
 
 function displayFlagCount() {
-    elFlagCounter.innerText = 'Flag: ' + (gLevel.mine - gGame.markedCount)
+    gElFlagCounter.innerText = 'Flag: ' + (gLevel.mine - gGame.markedCount)
 }
 
 function displayTimer() {
     if (!gGame.isOn) { clearInterval(gTimeInterval); return }
     var start = gGame.secsPassed;
     var currTime = ((Date.now() - start)) / 1000
-    elTime.innerHTML = 'Time: ' + currTime.toFixed(2);
+    gElTime.innerHTML = 'Time: ' + currTime.toFixed(2);
+    gTime = currTime.toFixed(2);
 }
 
 function clearAllInterval() {
@@ -144,3 +170,18 @@ function clearAllInterval() {
     }
 }
 
+function setBest() {
+    var elLevelSelected = document.querySelectorAll('input')
+
+    //debugger
+    for (var i = 0; i < elLevelSelected.length; i++) {
+        if (elLevelSelected[i].id === gCurrnetLevel) {
+            // debugger
+            if (localStorage.getItem(gCurrnetLevel) === 'Infinity') {
+                return 0
+            } else {
+                return localStorage.getItem(gCurrnetLevel);
+            }
+        }
+    }
+}

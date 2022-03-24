@@ -61,14 +61,64 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-function getEmptyCellsBoard(board, WhatIsNotEmpty) {
+function getEmptyCellsBoard(board) {
     var emptyCellsBoard = []
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
-            if (board[i][j] !== WhatIsNotEmpty) {
+            if (!board[i][j].isShown && !board[i][j].isMine) {
                 emptyCellsBoard.push({ i: i, j: j })
             }
         }
     }
     return emptyCellsBoard
+}
+
+function CopyMat(board) {
+    var newBoard = []
+    for (var i = 0; i < board.length; i++) {
+        newBoard[i] = []
+        for (var j = 0; j < board[0].length; j++) {
+            newBoard[i][j] = {
+                minesAroundCount: board[i][j].minesAroundCount,
+                isShown: board[i][j].isShown,
+                isMine: board[i][j].isMine,
+                isMarked: board[i][j].isMarked
+            }
+        }
+    }
+    return newBoard
+}
+
+function renderBoardUndo(mat, selector) {
+    var strHTML = '<table border="0"><tbody>';
+    for (var i = 0; i < mat.length; i++) {
+        strHTML += '<tr>';
+        for (var j = 0; j < mat[0].length; j++) {
+
+            var className = 'cell cell-' + i + '-' + j;
+
+            var cell;
+            if (!mat[i][j].isShown && mat[i][j].isMarked) {
+                cell = FLAG
+                className += ' hideCell'
+            }
+            else if (mat[i][j].isShown) {
+                if (mat[i][j].isMine) { cell = MINE }
+                if (mat[i][j].minesAroundCount >= 0) { cell = mat[i][j].minesAroundCount }
+                className += ' showCell'
+            } else {
+                cell = WINDOW
+                className += ' hideCell'
+            }
+
+
+            var dataSet = `data-i="${i}" data-j="${j}"`
+            var clicked = `onmouseup="cellClicked(event.button, this, ${i}, ${j})"`
+            strHTML += '<td class="' + className + '"' + clicked + ' ' /*+ dataSet*/ + ' > ' + cell + ' </td>'
+        }
+        strHTML += '</tr>'
+    }
+    strHTML += '</tbody></table>';
+    var elContainer = document.querySelector(selector);
+    elContainer.innerHTML = strHTML;
 }

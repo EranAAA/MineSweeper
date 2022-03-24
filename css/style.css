@@ -1,44 +1,99 @@
+html {
+  margin: 0;
+}
+
 body {
   margin: auto;
   text-align: center;
   background-color: lightskyblue;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: monospace;
+}
+
+h1 {
+  font-family: monospace;
+  font-size: 60px;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: white;
 }
 
 label {
   margin-right: 20px;
 }
 
-.panel {
-  margin: auto;
-  background-color: lightskyblue;
-  height: 60px;
+.levelDiv {
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: white;
+  font-size: 20px;
 }
 
-.flagCounter,
+p {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: white;
+  font-size: 20px;
+}
+
+.panel {
+  padding-top: 15px;
+  margin: auto;
+  background-color: white;
+  height: 60px;
+  margin-top: 0;
+}
+
 .timer,
-.livesCounter,
-.hintCounter {
-  display: inline-block;
+.bestScore {
+  display: inline;
   font-size: 18px;
   /* margin-right: 120px; */
   height: 40px;
   width: 40px;
 }
-
-button {
-  /* display: inline-block; */
+.flagCounter,
+.livesCounter,
+.hintCounter,
+.safeCounter {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: inline-block;
+  font-size: 18px;
+  /* margin-right: 120px; */
   height: 40px;
   width: 40px;
-  margin-left: 100px;
-  margin-right: 100px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.restartBtn,
+.undoBtn,
+.safeCheckBtn,
+.hintsBtn {
+  margin-top: 10px;
+  background-color: none;
+  border: 0;
+  padding-left: 5%;
+  padding-right: 5%;
+  /* margin-left: 100px;
+  margin-right: 0px; */
+  background-color: transparent;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.board-container {
+  padding-top: 75px;
+  background-image: linear-gradient(white, lightskyblue);
 }
 
 table {
   margin: auto;
 }
 
-td {
+/* td {
   background-color: lightgray;
   height: 40px;
   width: 40px;
@@ -48,16 +103,44 @@ td {
 td:hover {
   background-color: lightslategrey;
   cursor: pointer;
+} */
+
+td {
+  height: 40px;
+  width: 40px;
+  box-shadow: inset 0px 1px 0px 0px #bee2f9;
+  background: linear-gradient(to bottom, #63b8ee 5%, #468ccf 100%);
+  background-color: #63b8ee;
+  border-radius: 0px;
+  border: 1px solid #3866a3;
+  /* display: inline-block; */
+  cursor: pointer;
+  color: #14396a;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #7cacde;
+}
+td:hover {
+  background: linear-gradient(to bottom, #94aabf 5%, #405360 100%);
 }
 
 .showCell {
-  background-color: white;
+  background: lightcyan;
 }
 
 .hideCell {
   background-color: lightgray;
 }
 
+.markCell {
+  background-color: lightcoral;
+}
+
 footer {
   padding-top: 10px;
+  background-color: lightskyblue;
+  font-family: fantasy;
+  font-size: 18px;
 }
