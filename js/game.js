@@ -4,8 +4,8 @@ const LIVES = 3
 const HINTS = 3
 const SAFE_CHECK = 3
 
-const NORMAL = '😀'
-const SAD = '😵'
+const NORMAL = '😜'
+const SAD = '☢️'
 const WIN = '😎'
 
 var gBoard;
