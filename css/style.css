@@ -93,18 +93,6 @@ table {
   margin: auto;
 }
 
-/* td {
-  background-color: lightgray;
-  height: 40px;
-  width: 40px;
-  border: 1px solid black;
-}
-
-td:hover {
-  background-color: lightslategrey;
-  cursor: pointer;
-} */
-
 td {
   height: 40px;
   width: 40px;
@@ -116,7 +104,7 @@ td {
   /* display: inline-block; */
   cursor: pointer;
   color: #14396a;
-  font-family: Arial;
+  font-family: monospace;
   font-size: 18px;
   font-weight: bold;
   text-decoration: none;
@@ -131,11 +119,11 @@ td:hover {
 }
 
 .hideCell {
-  background-color: lightgray;
+  background: linear-gradient(to bottom, #63b8ee 5%, #468ccf 100%);
 }
 
 .markCell {
-  background-color: lightcoral;
+  background: red;
 }
 
 footer {

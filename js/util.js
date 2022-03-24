@@ -33,6 +33,25 @@ function getNeighbors(board, rowIdx, colIdx) {
     return neighborsPos
 }
 
+function getNeighborsForRecursion(board, rowIdx, colIdx) {
+    var neighborsPos = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i > board.length - 1) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j > board[0].length - 1) continue
+            if (i === rowIdx && j === colIdx) continue
+            if (board[i][j].isShown) continue
+            if (board[i][j].isMarked) continue
+            if (board[i][j].minesAroundCount > 0) continue
+            var cell = board[i][j]
+            if (cell) {
+                neighborsPos.push({ i: i, j: j })
+            }
+        }
+    }
+    return neighborsPos
+}
+
 function printBoard(board) {
     var bingoBoardRows = []
     var bingoBoardColumns = []
