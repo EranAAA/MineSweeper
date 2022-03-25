@@ -42,7 +42,7 @@ function getNeighborsForRecursion(board, rowIdx, colIdx) {
             if (i === rowIdx && j === colIdx) continue
             if (board[i][j].isShown) continue
             if (board[i][j].isMarked) continue
-            if (board[i][j].minesAroundCount > 0) continue
+            //if (board[i][j].minesAroundCount > 0) continue
             var cell = board[i][j]
             if (cell) {
                 neighborsPos.push({ i: i, j: j })

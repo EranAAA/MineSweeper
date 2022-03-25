@@ -75,7 +75,14 @@ function cellClicked(evBtn, elCell, i, j) {
         if (checkGameOver()) gGame.isOn = false
         // if we press on cell that not have negs so we need to open first degree negs.
     } else if (gBoard[i][j].minesAroundCount === 0) {
-        showCellsAround(i, j)
+        gGame.shownCount++
+        // Update Model
+        gBoard[i][j].isShown = true
+        // Update DOM
+        renderCell({ i: i, j: j }, gBoard[i][j].minesAroundCount, 'showCell')
+
+        var positions = getNeighbors(gBoard, i, j)
+        showCellsAround(i, j, positions)
     }
 }
 
@@ -134,10 +141,9 @@ function showAllMines(row, col) {
     }
     return gameOver()
 }
-//Open First Degree cells // NO Recursion //
-function showCellsAround(i, j) {
-    var positions = getNeighbors(gBoard, i, j)
-    positions.unshift({ i: i, j: j })
+
+//Open First Degree cells // Recursion //
+function showCellsAround(i, j, positions) {
 
     for (const pos of positions) {
         // IGNORE overRight cells the open allready or marked with flag.
@@ -153,48 +159,28 @@ function showCellsAround(i, j) {
     undoRecord()
 
     ////////////////////////////////////////
-    //Recursion
-    ////////////////////////////////////////
 
-    // for (var i = 0; i < positions.length; i++) {
-    //     var pos = positions[i]
-    //     if (pos.i === i && pos.j === j) {
-    //         continue
-    //     } else if (gBoard[pos.i][pos.j].minesAroundCount === 0) {
-    //         gcellsRecursion.push(pos)
-    //     }
-    // }
+    var gCellsRecursion = []
+    for (const pos of positions) {
+        if (gBoard[pos.i][pos.j].minesAroundCount > 0) continue
+        var cells = getNeighborsForRecursion(gBoard, pos.i, pos.j)
+        if (!cells.length) continue
+        for (let i = 0; i < cells.length; i++) {
+            gCellsRecursion.push(cells[i])
+        }
+        //debugger
+        console.log(gCellsRecursion);
+    }
 
-    //debugger
-    // for (let i = 0; i < positions.length; i++) {
-    //     var posI = positions[i]
-    //     if (gBoard[posI.i][posI.j].minesAroundCount === 0) {
-    //         var newPositions = getNeighborsForRecursion(gBoard, posI.i, posI.j)
-    //         for (let j = 0; j < newPositions.length; j++) {
-    //             var posJ = newPositions[j]
-    //             gCellsRecursion.push(posJ)
-    //         }
-    //     }
-    // }
+    if (gCellsRecursion.length) {
+        //debugger
+        showCellsAround(i, j, gCellsRecursion)
+    }
 
-    console.log(gCellsRecursion);
-    // for (const pos of gCellsRecursion) {
-    //     showCellsAround(pos.i, pos.j)
-    // }
-
-    // for (var i = 0; i < gcellsRecursion.length; i++) {
-    //     var pos = gcellsRecursion[i]
-    //     if (gcellsRecursion.length && gBoard[pos.i][pos.j].minesAroundCount === 0) {
-    //         gcellsRecursion.splice(i, 1)
-    //         showCellsAround(pos.i, pos.j)
-    //         break
-    //     }
-    // }
-    ////////////////////////////////////////
-    //Recursion
     ////////////////////////////////////////
 
     if (checkGameOver()) gGame.isOn = false
+
 }
 
 // Keep the player live.

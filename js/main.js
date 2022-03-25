@@ -88,7 +88,7 @@ function init() {
     gElLivesCounter.innerText = 'Lives: ' + gGame.lives
     gElHintsCounter.innerText = 'Hints: ' + gGame.hints
     gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
-    gElScoreRecord.innerText = '// Best: 0.0' + setBest()
+    gElScoreRecord.innerText = '// Best: ' + setBest()
     gElButtonHint.style.background = ''
     gElTime.innerText = 'Time: 0.00'
 
