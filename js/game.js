@@ -18,7 +18,7 @@ var gCellsRecursion = [];
 
 function cellClicked(evBtn, elCell, i, j) {
 
-    ManuallyPosdMines(elCell, i, j)
+    if (gIsOnManully) ManuallyPosdMines(elCell, i, j)
 
     // RETURN if game if off
     if (!gGame.isOn) return

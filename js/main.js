@@ -88,7 +88,7 @@ function init() {
     gElLivesCounter.innerText = 'Lives: ' + gGame.lives
     gElHintsCounter.innerText = 'Hints: ' + gGame.hints
     gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
-    gElScoreRecord.innerText = '// Best: ' + setBest()
+    gElScoreRecord.innerText = '// Best: 0.0' + setBest()
     gElButtonHint.style.background = ''
     gElTime.innerText = 'Time: 0.00'
 
@@ -174,6 +174,9 @@ function placeTheMines(level, rowIgn, colIgn) {
 }
 
 function onClickManuMined(elBtn) {
+
+    if (gGame.shownCount > 0) return
+
     gGame.isOn = false
     gIsOnManully = true
 
@@ -189,6 +192,7 @@ function onClickManuMined(elBtn) {
 }
 
 function ManuallyPosdMines(elCell, i, j) {
+    console.log('ManuallyPosdMines');
 
     if (gGame.isOn) return
     if (gCounterManualMine >= gLevel.mine) return gIsOnManully = false
