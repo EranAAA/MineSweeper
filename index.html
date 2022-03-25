@@ -11,7 +11,7 @@
     <h1>Mine💣Sweeper</h1>
 
     <form>
-      <p>Chose your level!</p>
+      <p>Choose your level!</p>
       <div class="levelDiv">
         <input
           id="Easy"
@@ -49,11 +49,12 @@
       <div class="timer">Timer</div>
       <div class="bestScore">score</div>
       <br />
-      <button onclick="hint()" class="hintsBtn">💡</button>
+      <button onclick="onClickHint()" class="hintsBtn">💡</button>
       <button onclick="init()" class="restartBtn">😜</button>
-      <button onclick="safeCheck()" class="safeCheckBtn">✔️</button>
-      <button onclick="undo()" class="undoBtn">🔙</button>
-      <button onclick="manuallyMined(this)" class="manuallyMinedBtn">🪛</button>
+      <button onclick="onClickSafeCheck()" class="safeCheckBtn">✔️</button>
+      <button onclick="onClickUndo()" class="undoBtn">🔙</button>
+      <button onclick="onClickManuMined(this)" class="manuallyBtn">🪛</button>
+      <button onclick="onClickSevenBoom(this)" class="sevenBoom">⑦</button>
     </div>
 
     <div class="board-container"></div>

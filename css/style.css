@@ -72,7 +72,8 @@ p {
 .undoBtn,
 .safeCheckBtn,
 .hintsBtn,
-.manuallyMinedBtn {
+.manuallyBtn,
+.sevenBoom {
   margin-top: 10px;
   background-color: none;
   border: 0;
@@ -83,6 +84,7 @@ p {
   background-color: transparent;
   font-size: 30px;
   cursor: pointer;
+  color: orange;
 }
 
 .board-container {

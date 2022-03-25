@@ -28,7 +28,7 @@ function cellClicked(evBtn, elCell, i, j) {
     // when press is first and its not from puttong flag we Place the mines and count negs!
     if (gGame.shownCount === 0 && gGame.markedCount === 0 && gisInUndo === false) {
 
-        if (!gInOnManully) placeTheMines(gLevel.mine, i, j) // placing the mine Randomly
+        if (!gIsOnManully && !gIsOn7Boom) placeTheMines(gLevel.mine, i, j) // placing the mine Randomly
 
         setMinesNegsCount(gBoard) // placeing the count of negs around
         printBoard(gBoard) // Render the board
@@ -217,7 +217,7 @@ function keepLiving(i, j) {
 }
 
 // come from onclick
-function hint() {
+function onClickHint() {
     // RETURN if we allreadt press HINT or didnt do first press or we out of hints!
     if (gGame.isHint) return
     if (!gGame.shownCount) return
@@ -262,7 +262,7 @@ function hintShow(i, j) {
 }
 
 // Get safe check logic
-function safeCheck() {
+function onClickSafeCheck() {
     if (!gGame.safeCheck) return
     gGame.safeCheck--
     gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
@@ -323,6 +323,7 @@ function recordBestScore() {
 
 // NEED TO FIX //
 function undoRecord() {
+
     gisInUndo = true
 
     var copy = CopyMat(gBoard)
@@ -341,9 +342,11 @@ function undoRecord() {
 
     gCounterForUndo++
     console.log('*******Counter For Undo********', gCounterForUndo);
+    gisInUndo = false
+
 }
 // NEED TO FIX //
-function undo() {
+function onClickUndo() {
     gUndo.splice(0, 1, gInitBoard)
 
     if (gCounterForUndo === 1) {

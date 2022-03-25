@@ -33,10 +33,14 @@ var gUndoProperties = []
 var gTime;
 var gTimeInterval;
 
-//
-var gInOnManully = false
+// For Manually Mine
+var gIsOnManully = false
 var gCounterManualMine = 0
 var gCellsPicked = []
+
+// For 7BOOM! button
+var gIsOn7Boom = false
+
 
 // Main global Vars
 var gBoard;
@@ -169,10 +173,9 @@ function placeTheMines(level, rowIgn, colIgn) {
     }
 }
 
-function manuallyMined(elBtn) {
-    console.log('here');
+function onClickManuMined(elBtn) {
     gGame.isOn = false
-    gInOnManully = true
+    gIsOnManully = true
 
     elBtn.style.background = 'yellow'
 
@@ -188,7 +191,7 @@ function manuallyMined(elBtn) {
 function ManuallyPosdMines(elCell, i, j) {
 
     if (gGame.isOn) return
-    if (gCounterManualMine >= gLevel.mine) return gInOnManully = false
+    if (gCounterManualMine >= gLevel.mine) return gIsOnManully = false
 
     // Update Model
     gBoard[i][j].isMine = true
@@ -198,6 +201,30 @@ function ManuallyPosdMines(elCell, i, j) {
     gCellsPicked.push({ i: i, j: j })
 
     gCounterManualMine++
+}
+
+function onClickSevenBoom(elBtn) {
+
+    elBtn.style.background = 'yellow'
+    gIsOn7Boom = true
+    init()
+
+    for (var i = 0; i < gAllPositions.length; i++) {
+        var pos = gAllPositions[i]
+        if (i === 0) continue
+        if (String(i).includes('7') || ((i % 7) === 0)) {
+            // Update Model
+            gBoard[pos.i][pos.j].isMine = true
+            // Update DOM
+        }
+    }
+    if (gIsOn7Boom) {
+        gIsOn7Boom = false
+        setTimeout(() => {
+            elBtn.style.background = ''
+        }, 500);
+        return
+    }
 }
 
 // function that count the mines around.. init after firest press.
