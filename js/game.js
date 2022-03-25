@@ -1,212 +1,388 @@
 'use strict'
 
-const LIVES = 3
-const HINTS = 3
-const SAFE_CHECK = 3
+const FLAG = '🚩'
+const EXPLODE = '💥'
+const MINE = '💣'
+const FLAG_ON_MINE = '🏴'
+const WINDOW = ''
 
-const NORMAL = '😜'
-const SAD = '☢️'
-const WIN = '😎'
+var gTimer // ******Check if i use it.******
 
-var gAllPositions = [] // For placing mines
-var gCurrnetLevel = 'Hard' //Default
+// For Undo Button
+var gInitBoard = []
+var gCounterForUndo = 0
+var gisInUndo = false
 
-// Global Selectors Elements
-var gElFlagCounter = document.querySelector('.flagCounter')
-var gElLivesCounter = document.querySelector('.livesCounter')
-var gElHintsCounter = document.querySelector('.hintCounter')
-var gElSafeCounter = document.querySelector('.safeCounter')
-var gElScoreRecord = document.querySelector('.bestScore')
+// For Recursion
+var gCellsRecursion = [];
 
-// Global Button Elements
-var gElButton = document.querySelector('.restartBtn')
-var gElButtonHint = document.querySelector('.hintsBtn')
-var gElButtonSafeCheck = document.querySelector('.safeCheckBtn')
-var gElButtonUndo = document.querySelector('.undoBtn')
-var gElTime = document.querySelector('.timer')
+function cellClicked(evBtn, elCell, i, j) {
 
-// For handle the Undo Button
-var gUndo = []
-var gUndoProperties = [{
-    shownCount: 0,
-    markedCount: 0,
-    lives: LIVES,
-    hints: HINTS,
-    safeCheck: SAFE_CHECK
-}]
+    ManuallyPosdMines(elCell, i, j)
 
-// For handle the Timer Button
-var gTime;
-var gTimeInterval;
+    // RETURN if game if off
+    if (!gGame.isOn) return
+    // RETURN if player try to put flag on first press
+    if (gGame.shownCount === 0 && evBtn === 2) return
 
-// Main global Vars
-var gBoard;
-var gLevel = {
-    size: 8,
-    mine: 12
-};
-var gGame = {
-    isOn: false,
-    shownCount: 0,
-    markedCount: 0,
-    secsPassed: 0,
-    lives: LIVES,
-    hints: HINTS,
-    isHint: false,
-    safeCheck: SAFE_CHECK,
-}
+    // when press is first and its not from puttong flag we Place the mines and count negs!
+    if (gGame.shownCount === 0 && gGame.markedCount === 0 && gisInUndo === false) {
 
-function init() {
-    // init the Ggame
-    gGame.isOn = true
-    gGame.shownCount = gUndoProperties[0].shownCount = 0
-    gGame.markedCount = gUndoProperties[0].markedCount = 0
-    gGame.secsPassed = 0
-    gGame.lives = gUndoProperties[0].lives = LIVES
-    gGame.hints = gUndoProperties[0].hints = HINTS
-    gGame.isHint = false
-    gGame.safeCheck = gUndoProperties[0].safeCheck = SAFE_CHECK
+        if (!gInOnManully) placeTheMines(gLevel.mine, i, j) // placing the mine Randomly
 
-    // init the array that return all the position in pone array.
-    gAllPositions = []
-
-    // inint all Elements
-    gElButton.innerText = NORMAL
-    gElFlagCounter.innerText = 'Flag: ' + gLevel.mine
-    gElLivesCounter.innerText = 'Lives: ' + gGame.lives
-    gElHintsCounter.innerText = 'Hints: ' + gGame.hints
-    gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
-    gElScoreRecord.innerText = '// Best: ' + setBest()
-    gElButtonHint.style.background = ''
-    gElTime.innerText = 'Time: 0.00'
-
-    // Build the main board and render to HTML
-    gBoard = buildBoard(gLevel);
-    renderBoard(gBoard, '.board-container');
-
-    // Clear all intervals
-    clearAllInterval()
-}
-
-// in the game every change level we change the gLevel and run init()
-function changeBoard(size, mine, level) {
-    gCurrnetLevel = level
-    gLevel.size = size
-    gLevel.mine = mine
-    init();
-}
-
-// return the init cell in the board as an Object
-function createCell() {
-    return {
-        minesAroundCount: 0,
-        isShown: false,
-        isMine: false,
-        isMarked: false
+        setMinesNegsCount(gBoard) // placeing the count of negs around
+        printBoard(gBoard) // Render the board
+        undoRecord() // Record the first Default board for Undo button
+        gCounterForUndo-- // To prevent counting duplicate.. happen only in first press
+        gInitBoard = CopyMat(gBoard) // Global that keep the Original Board.
     }
-}
 
-// Bulid the matrix by the level parameter.
-function buildBoard(level) {
-    var board = []
-    for (var i = 0; i < level.size; i++) {
-        board[i] = []
-        for (var j = 0; j < level.size; j++) {
-            board[i].push(createCell())
-            gAllPositions.push({ i: i, j: j })
-        }
-    }
-    return board
-}
+    // Go to the hint button LOGIC
+    if (gGame.isHint) return hintShow(i, j)
 
-// rendering the Board to the page.
-function renderBoard(mat, selector) {
-    var strHTML = '<table border="0"><tbody>';
-    for (var i = 0; i < mat.length; i++) {
-        strHTML += '<tr>';
-        for (var j = 0; j < mat[0].length; j++) {
-            // var cell = mat[i][j].isMine ? '*' : mat[i][j].minesAroundCount;
-            var cell = ''
-            var className = 'cell cell-' + i + '-' + j;
-            var clicked = `onmouseup="cellClicked(event.button, this, ${i}, ${j})"`
-            strHTML += '<td class="' + className + '"' + clicked + ' ' + ' > ' + cell + ' </td>'
-        }
-        strHTML += '</tr>'
-    }
-    strHTML += '</tbody></table>';
-    var elContainer = document.querySelector(selector);
-    elContainer.innerHTML = strHTML;
-}
+    // RETURN if the is open and its mine.. Ignore duplicate count.
+    if (gBoard[i][j].isShown && gBoard[i][j].isMine) return
+    // RETURN if the is open and its NUmber.. Ignore duplicate count.
+    if (gBoard[i][j].isShown && gBoard[i][j].minesAroundCount > 0) return
 
-// render the cell for Each change while playing.. manually managed the css classes
-function renderCell(location, value, classAdded) {
-    var elCell = document.querySelector(`.cell-${location.i}-${location.j}`);
-    elCell.innerText = value;
-    elCell.classList.remove('showCell', 'hideCell', 'markCell')
-    if (classAdded) elCell.classList.add(classAdded)
-}
+    // Start the time when the game beggin
+    gGame.secsPassed = (gGame.secsPassed) ? gGame.secsPassed : Date.now()
+    // Hsow time every 50 mili
+    gTimeInterval = setInterval(() => displayTimer(), 50);
 
-// function the place the Mines.. init after firest press.
-function placeTheMines(level, rowIgn, colIgn) {
-    for (let i = 0; i < level; i++) {
-        var randomNum = getRandomInt(0, gAllPositions.length)
-        var ranPos = gAllPositions[randomNum]
-        // ignore the cell that pressed. not clear if its was needed to be include
-        if (ranPos.i === rowIgn && ranPos.j === colIgn) { i--; continue }
+    // if the player press the right mouse button we go to other Function hintShow()
+    if (evBtn === 2) return cellMarked(elCell, i, j)
+
+    // if the playes press on flag ewe ignore and put one less count.
+    if (elCell.innerText === FLAG) { gGame.shownCount--; return }
+
+    // if its MINE we lose but we have also 3 LIVES
+    if (gBoard[i][j].isMine) {
+        //Return the Func keepLiving that keep the player alive
+        if (gGame.lives) return keepLiving(i, j)
+        // Go to function the show all MINES
+        showAllMines(i, j)
+        // if the player have negs around him we show only the pressed cell
+    } else if (gBoard[i][j].minesAroundCount > 0) {
+        gGame.shownCount++
         // Update Model
-        gBoard[ranPos.i][ranPos.j].isMine = true
-        // update Array
-        gAllPositions.splice(randomNum, 1)
+        gBoard[i][j].isShown = true
+        // Update DOM
+        renderCell({ i: i, j: j }, gBoard[i][j].minesAroundCount, 'showCell')
+        // Record the step for Undo button
+        undoRecord()
+        // Check if game END.
+        if (checkGameOver()) gGame.isOn = false
+        // if we press on cell that not have negs so we need to open first degree negs.
+    } else if (gBoard[i][j].minesAroundCount === 0) {
+        showCellsAround(i, j)
     }
 }
 
-// function that count the mines around.. init after firest press.
-function setMinesNegsCount(board) {
-    for (var i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-            board[i][j].minesAroundCount = CountNeighbors(board, i, j)
-        }
+// Marked cell with right mouse click with FLAG
+function cellMarked(elCell, i, j) {
+
+    if (elCell.innerText === WINDOW) {
+        // Update Model
+        gBoard[i][j].isMarked = true
+        //Update DOM
+        renderCell({ i: i, j: j }, FLAG, 'hideCell')
+
+        gGame.markedCount++
+        // Record the step for Undo button
+        undoRecord()
     }
-}
+    else {
+        // Update Model
+        gBoard[i][j].isMarked = false
+        //Update DOM
+        renderCell({ i: i, j: j }, WINDOW, 'hideCell')
 
-// in game display how many flag left Zero mines
-function displayFlagCount() {
-    gElFlagCounter.innerText = 'Flag: ' + (gLevel.mine - gGame.markedCount)
-}
-
-// in game display Time running every few milisecond
-function displayTimer() {
-    // Stop timer when game end
-    if (!gGame.isOn) { clearInterval(gTimeInterval); return }
-
-    var start = gGame.secsPassed;
-    var currTime = ((Date.now() - start)) / 1000
-
-    // Update DOM
-    gElTime.innerHTML = 'Time: ' + currTime.toFixed(2);
-    // Update Global
-    gTime = currTime.toFixed(2);
-}
-
-function clearAllInterval() {
-    // Get a reference to the last interval + 1
-    const interval_id = window.setInterval(function () { }, Number.MAX_SAFE_INTEGER);
-    // Clear any timeout/interval up to that id
-    for (let i = 1; i < interval_id; i++) {
-        window.clearInterval(i);
+        gGame.markedCount--
+        // Record the step for Undo button
+        undoRecord()
     }
+    // Show in page the flags count
+    displayFlagCount()
+    // Check if game END.
+    if (checkGameOver()) gGame.isOn = false
 }
 
-// in game display the best score for each level
-function setBest() {
-    var elLevelSelected = document.querySelectorAll('input')
-    for (var i = 0; i < elLevelSelected.length; i++) {
-        if (elLevelSelected[i].id === gCurrnetLevel) {
-            if (localStorage.getItem(gCurrnetLevel) === 'Infinity') {
-                return 0
-            } else {
-                return localStorage.getItem(gCurrnetLevel);
+//show All Mines
+function showAllMines(row, col) {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard[i].length; j++) {
+            if (i === row && j === col) {
+                // Update Model
+                gBoard[i][j].isShown = true
+                // Update DOM
+                renderCell({ i: i, j: j }, EXPLODE, 'showCell')
+            } else if (gBoard[i][j].isMarked) {
+                gGame.shownCount++
+                // Update Model
+                gBoard[i][j].isShown = true
+                // Update DOM
+                renderCell({ i: i, j: j }, FLAG_ON_MINE, 'showCell')
+            } else if (gBoard[i][j].isMine) {
+                gGame.shownCount++
+                // Update Model
+                gBoard[i][j].isShown = true
+                // Update DOM
+                renderCell({ i: i, j: j }, MINE, 'showCell')
             }
         }
+    }
+    return gameOver()
+}
+//Open First Degree cells // NO Recursion //
+function showCellsAround(i, j) {
+    var positions = getNeighbors(gBoard, i, j)
+    positions.unshift({ i: i, j: j })
+
+    for (const pos of positions) {
+        // IGNORE overRight cells the open allready or marked with flag.
+        if (gBoard[pos.i][pos.j].isShown) continue
+        if (gBoard[pos.i][pos.j].isMarked) continue
+        gGame.shownCount++
+        // Update Model
+        gBoard[pos.i][pos.j].isShown = true
+        // Update DOM
+        renderCell({ i: pos.i, j: pos.j }, gBoard[pos.i][pos.j].minesAroundCount, 'showCell')
+    }
+    // Record the step for Undo button
+    undoRecord()
+
+    ////////////////////////////////////////
+    //Recursion
+    ////////////////////////////////////////
+
+    // for (var i = 0; i < positions.length; i++) {
+    //     var pos = positions[i]
+    //     if (pos.i === i && pos.j === j) {
+    //         continue
+    //     } else if (gBoard[pos.i][pos.j].minesAroundCount === 0) {
+    //         gcellsRecursion.push(pos)
+    //     }
+    // }
+
+    //debugger
+    // for (let i = 0; i < positions.length; i++) {
+    //     var posI = positions[i]
+    //     if (gBoard[posI.i][posI.j].minesAroundCount === 0) {
+    //         var newPositions = getNeighborsForRecursion(gBoard, posI.i, posI.j)
+    //         for (let j = 0; j < newPositions.length; j++) {
+    //             var posJ = newPositions[j]
+    //             gCellsRecursion.push(posJ)
+    //         }
+    //     }
+    // }
+
+    console.log(gCellsRecursion);
+    // for (const pos of gCellsRecursion) {
+    //     showCellsAround(pos.i, pos.j)
+    // }
+
+    // for (var i = 0; i < gcellsRecursion.length; i++) {
+    //     var pos = gcellsRecursion[i]
+    //     if (gcellsRecursion.length && gBoard[pos.i][pos.j].minesAroundCount === 0) {
+    //         gcellsRecursion.splice(i, 1)
+    //         showCellsAround(pos.i, pos.j)
+    //         break
+    //     }
+    // }
+    ////////////////////////////////////////
+    //Recursion
+    ////////////////////////////////////////
+
+    if (checkGameOver()) gGame.isOn = false
+}
+
+// Keep the player live.
+function keepLiving(i, j) {
+    //Decrease one live
+    gGame.lives--
+    // counter
+    gGame.shownCount++
+
+    // Update Model
+    gBoard[i][j].isShown = true
+    // Update DOM
+    renderCell({ i: i, j: j }, MINE, 'showCell')
+    gElLivesCounter.innerText = 'Lives: ' + gGame.lives
+
+    // Record the step for Undo button
+    undoRecord()
+
+    if (checkGameOver()) gGame.isOn = false
+}
+
+// come from onclick
+function hint() {
+    // RETURN if we allreadt press HINT or didnt do first press or we out of hints!
+    if (gGame.isHint) return
+    if (!gGame.shownCount) return
+    if (!gGame.hints) return
+
+    gGame.isHint = true
+    gGame.hints--
+
+    //Update DOM
+    gElHintsCounter.innerText = 'Hints: ' + gGame.hints
+    gElButtonHint.style.background = 'yellow'
+}
+
+// find the cell to show
+function hintShow(i, j) {
+    // Get Cells
+    var hintCells = getNeighbors(gBoard, i, j)
+
+    for (const cell of hintCells) {
+        if (gBoard[cell.i][cell.j].isShown) {
+            continue
+        } else if (gBoard[cell.i][cell.j].isMine) {
+            renderCell({ i: cell.i, j: cell.j }, MINE, 'showCell')
+        } else {
+            renderCell({ i: cell.i, j: cell.j }, gBoard[cell.i][cell.j].minesAroundCount, 'showCell')
+        }
+    }
+    setTimeout(() => {
+        for (const cell of hintCells) {
+            if (gBoard[cell.i][cell.j].isShown) {
+                continue
+            } else if (gBoard[cell.i][cell.j].isMine) {
+                renderCell({ i: cell.i, j: cell.j }, WINDOW, 'hideCell')
+            } else {
+                renderCell({ i: cell.i, j: cell.j }, WINDOW, 'hideCell')
+            }
+        }
+        gElButtonHint.style.background = ''
+        gGame.isHint = false
+    }, 1000);
+
+}
+
+// Get safe check logic
+function safeCheck() {
+    if (!gGame.safeCheck) return
+    gGame.safeCheck--
+    gElSafeCounter.innerText = 'Safe: ' + gGame.safeCheck
+
+    var emptyCells = getEmptyCellsBoard(gBoard)
+    var randomNum = getRandomInt(0, emptyCells.length)
+    var randomCell = emptyCells[randomNum]
+    renderCell({ i: randomCell.i, j: randomCell.j }, WINDOW, 'markCell')
+
+    setTimeout(() => {
+        renderCell({ i: randomCell.i, j: randomCell.j }, WINDOW, 'hideCell')
+    }, 100);
+
+}
+
+// Check for WINS. // BAD LOGIC //
+function checkGameOver() {
+    if (gGame.shownCount === (gLevel.size ** 2 - gLevel.mine) && gGame.markedCount === gLevel.mine) {
+        gElButton.innerText = WIN
+        recordBestScore()
+        return true
+    } else if (gGame.shownCount === gLevel.size ** 2 && gGame.lives < LIVES) {
+        gElButton.innerText = WIN
+        recordBestScore()
+        return true
+    } else if ((gGame.shownCount + gGame.markedCount) === gLevel.size ** 2) {
+        gElButton.innerText = WIN
+        recordBestScore()
+        return true
+    }
+    console.log('gGame.shownCount ', gGame.shownCount);
+    console.log('gGame.markedCount ', gGame.markedCount);
+    console.log('gGame.lives ', gGame.lives);
+}
+
+// If LOSE
+function gameOver() {
+    gGame.isOn = false
+    gElButton.innerText = SAD
+}
+
+// Best score record LOGIC
+function recordBestScore() {
+    var elLevelSelected = document.querySelectorAll('input')
+
+    if (!localStorage['Easy']) localStorage.setItem("Easy", Infinity)
+    if (!localStorage['Hard']) localStorage.setItem("Hard", Infinity)
+    if (!localStorage['Extream']) localStorage.setItem("Extream", Infinity)
+
+    for (var i = 0; i < elLevelSelected.length; i++) {
+        if (elLevelSelected[i].id === gCurrnetLevel) {
+            var lastBestScore = +localStorage.getItem(gCurrnetLevel);
+            if (+gTime < lastBestScore) localStorage.setItem(gCurrnetLevel, +gTime);
+            return;
+        }
+    }
+}
+
+// NEED TO FIX //
+function undoRecord() {
+    gisInUndo = true
+
+    var copy = CopyMat(gBoard)
+    gUndo.push(copy)
+
+    gUndoProperties.push({
+        isOn: gGame.isOn,
+        shownCount: gGame.shownCount,
+        markedCount: gGame.markedCount,
+        secsPassed: gGame.secsPassed,
+        lives: gGame.lives,
+        hints: gGame.hints,
+        safeCheck: gGame.safeCheck,
+        isHint: gGame.isHint
+    })
+
+    gCounterForUndo++
+    console.log('*******Counter For Undo********', gCounterForUndo);
+}
+// NEED TO FIX //
+function undo() {
+    gUndo.splice(0, 1, gInitBoard)
+
+    if (gCounterForUndo === 1) {
+        //debugger
+        renderBoardUndo(gInitBoard, '.board-container')
+
+        gBoard = gInitBoard
+
+        gGame.isOn = true
+        gGame.shownCount = 0
+        gGame.markedCount = 0
+        gGame.secsPassed = gUndoProperties[0].secsPassed
+        gGame.lives = LIVES
+        gGame.hints = HINTS
+        gGame.isHint = false
+        gGame.safeCheck = SAFE_CHECK
+
+        //gUndo.splice(gUndo.length - 1, 1)
+        gUndo = []
+        gUndo.push(gInitBoard)
+        gUndoProperties.splice(gUndoProperties.length - 1, 1)
+        gCounterForUndo--
+        console.log('*******gCounterForUndo********', gCounterForUndo);
+
+    } else if (gCounterForUndo === 0) {
+        return
+    } else {
+        //debugger
+        gBoard = gUndo[gUndo.length - 2]
+        renderBoardUndo(gBoard, '.board-container');
+
+        gGame = gUndoProperties[gUndo.length - 1]
+        console.log(gUndoProperties);
+        console.log(gGame);
+
+        gUndo.splice(gUndo.length - 1, 1)
+        gUndoProperties.splice(gUndoProperties.length - 1, 1)
+        gCounterForUndo--
+        console.log('*******gCounterForUndo********', gCounterForUndo);
+
     }
 }

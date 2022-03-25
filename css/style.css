@@ -71,7 +71,8 @@ p {
 .restartBtn,
 .undoBtn,
 .safeCheckBtn,
-.hintsBtn {
+.hintsBtn,
+.manuallyMinedBtn {
   margin-top: 10px;
   background-color: none;
   border: 0;
@@ -124,6 +125,10 @@ td:hover {
 
 .markCell {
   background: red;
+}
+
+.manuallyMarkedMine {
+  background: lightgreen;
 }
 
 footer {
