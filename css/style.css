@@ -98,14 +98,14 @@ p {
   background-color: transparent;
   font-size: 30px;
   cursor: pointer;
-  color: orange;
+  color: black;
   border-radius: 10%;
 }
 
 .safeCheckBtn span {
   color: black;
-  font-size: 18px;
-  font-family: fantasy;
+  font-size: 15px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .board-container {
