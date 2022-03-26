@@ -29,8 +29,8 @@ label {
 }
 
 p {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   margin-top: 0;
   margin-bottom: 0;
   background-color: white;
@@ -38,7 +38,7 @@ p {
 }
 
 .panel {
-  padding-top: 15px;
+  padding-top: 10px;
   margin: auto;
   background-color: white;
   height: 60px;
@@ -91,8 +91,8 @@ p {
   margin-top: 10px;
   background-color: none;
   border: 0;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 2%;
+  padding-right: 2%;
   /* margin-left: 100px;
   margin-right: 0px; */
   background-color: transparent;
@@ -100,6 +100,12 @@ p {
   cursor: pointer;
   color: orange;
   border-radius: 10%;
+}
+
+.safeCheckBtn span {
+  color: black;
+  font-size: 18px;
+  font-family: fantasy;
 }
 
 .board-container {
@@ -112,8 +118,8 @@ table {
 }
 
 td {
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   box-shadow: inset 0px 1px 0px 0px #bee2f9;
   background: linear-gradient(to bottom, #63b8ee 5%, #468ccf 100%);
   background-color: #63b8ee;

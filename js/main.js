@@ -185,7 +185,7 @@ function onClickManuMined(elBtn) {
 
     if (gGame.shownCount > 0) return
 
-    gElGameMode.innerText = 'Game Mode: Place Mine Manually'
+    gElGameMode.innerText = 'PLACE THE MINES AND CLICKED AGAIN WHEN FINISH'
 
     gGame.isOn = false
     gIsOnManully = true
@@ -198,6 +198,7 @@ function onClickManuMined(elBtn) {
         for (const pos of gCellsPicked) {
             renderCell({ i: pos.i, j: pos.j }, WINDOW, 'hideCell')
         }
+        gElGameMode.innerText = 'Game Mode: Place Mine Manually'
     }
 }
 
@@ -236,7 +237,7 @@ function onClickSevenBoom(elBtn) {
         }
     }
     if (gIsOn7Boom) {
-        gIsOn7Boom = false
+        //gIsOn7Boom = false
         setTimeout(() => {
             elBtn.style.background = ''
         }, 500);
@@ -297,5 +298,6 @@ function setBest() {
 
 function onClickGameMode() {
     gElGameMode.innerText = 'Game Mode: Regular'
+    gIsOn7Boom = false
 
 }

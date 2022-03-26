@@ -51,12 +51,49 @@
       <div class="timer">Timer</div>
       <div class="bestScore">score</div>
       <br />
-      <button onclick="onClickHint()" class="hintsBtn">💡</button>
-      <button onclick="onClickSafeCheck()" class="safeCheckBtn">✔️</button>
-      <button onclick="onClickUndo()" class="undoBtn">🔙</button>
-      <button onclick="init() ;onClickGameMode()" class="restartBtn">😜</button>
-      <button onclick="onClickManuMined(this)" class="manuallyBtn">✋🏼</button>
-      <button onclick="onClickSevenBoom(this)" class="sevenBoom">⑦</button>
+      <button
+        title="From your second Press you can get HINT that show your Neighbors"
+        onclick="onClickHint()"
+        class="hintsBtn"
+      >
+        🔦
+      </button>
+      <button
+        title="You get ONE very quick Flashing RED CELL with NO MINE!"
+        onclick="onClickSafeCheck()"
+        class="safeCheckBtn"
+      >
+        <span>SafeCheck</span>
+      </button>
+      <button
+        title="NOT WORK"
+        onclick="onClickSafeCheck()"
+        onclick="onClickUndo()"
+        class="undoBtn"
+      >
+        🔙
+      </button>
+      <button
+        title="Restart the game in a Regular mode"
+        onclick="init() ;onClickGameMode()"
+        class="restartBtn"
+      >
+        😜
+      </button>
+      <button
+        title="Before game start you can place the mines manually"
+        onclick="onClickManuMined(this)"
+        class="manuallyBtn"
+      >
+        ✋🏼
+      </button>
+      <button
+        title="Restart the game in a 7Boom! Logic"
+        onclick="onClickSevenBoom(this)"
+        class="sevenBoom"
+      >
+        ⑦
+      </button>
     </div>
 
     <div class="board-container"></div>
