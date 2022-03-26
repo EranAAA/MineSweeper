@@ -48,7 +48,7 @@ p {
 .timer,
 .bestScore {
   display: inline;
-  font-size: 18px;
+  font-size: 20px;
   /* margin-right: 120px; */
   height: 40px;
   width: 40px;
@@ -60,7 +60,7 @@ p {
   padding-top: 10px;
   padding-bottom: 10px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 20px;
   /* margin-right: 120px; */
   height: 40px;
   width: 40px;
@@ -72,7 +72,7 @@ p {
   padding-top: 5px;
   padding-bottom: 10px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 20px;
   /* margin-right: 120px; */
   height: 20px;
   /* width: 100px; */
@@ -96,7 +96,7 @@ p {
   /* margin-left: 100px;
   margin-right: 0px; */
   background-color: transparent;
-  font-size: 30px;
+  font-size: 32px;
   cursor: pointer;
   color: black;
   border-radius: 10%;
@@ -113,7 +113,7 @@ p {
 }
 
 .board-container {
-  padding-top: 110px;
+  padding-top: 115px;
   background-image: linear-gradient(white, lightskyblue);
 }
 
@@ -133,7 +133,7 @@ td {
   cursor: pointer;
   color: #14396a;
   font-family: monospace;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
   text-shadow: 0px 1px 0px #7cacde;
@@ -161,6 +161,6 @@ td:hover {
 footer {
   padding-top: 10px;
   background-color: lightskyblue;
-  font-family: fantasy;
+  font-family: monospace;
   font-size: 18px;
 }

@@ -1,6 +1,5 @@
 'use strict'
 
-
 function CountNeighbors(board, rowIdx, colIdx) {
     var count = 0
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {

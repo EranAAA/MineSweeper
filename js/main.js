@@ -4,8 +4,8 @@ const LIVES = 3
 const HINTS = 3
 const SAFE_CHECK = 3
 
-const NORMAL = '😜'
-const SAD = '☢️'
+const NORMAL = '🙂'
+const SAD = '🤯'
 const WIN = '😎'
 
 var gAllPositions = [] // For placing mines
@@ -62,15 +62,6 @@ var gGame = {
 }
 
 function init() {
-    // init the Ggame
-    // gGame.isOn = gUndoProperties[0].isOn = true
-    // gGame.shownCount = gUndoProperties[0].shownCount = 0
-    // gGame.markedCount = gUndoProperties[0].markedCount = 0
-    // gGame.secsPassed = gUndoProperties[0].secsPassed = 0
-    // gGame.lives = gUndoProperties[0].lives = LIVES
-    // gGame.hints = gUndoProperties[0].hints = HINTS
-    // gGame.isHint = gUndoProperties[0].isHint = false
-    // gGame.safeCheck = gUndoProperties[0].safeCheck = SAFE_CHECK
 
     gGame.isOn = true
     gGame.shownCount = 0
