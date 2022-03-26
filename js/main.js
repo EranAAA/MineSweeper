@@ -17,12 +17,14 @@ var gElLivesCounter = document.querySelector('.livesCounter')
 var gElHintsCounter = document.querySelector('.hintCounter')
 var gElSafeCounter = document.querySelector('.safeCounter')
 var gElScoreRecord = document.querySelector('.bestScore')
+var gElGameMode = document.querySelector('.gameMode')
 
 // Global Button Elements
 var gElButton = document.querySelector('.restartBtn')
 var gElButtonHint = document.querySelector('.hintsBtn')
 var gElButtonSafeCheck = document.querySelector('.safeCheckBtn')
 var gElButtonUndo = document.querySelector('.undoBtn')
+var gElButtonManually = document.querySelector('.manuallyBtn')
 var gElTime = document.querySelector('.timer')
 
 // For handle the Undo Button
@@ -79,6 +81,11 @@ function init() {
     gGame.isHint = false
     gGame.safeCheck = SAFE_CHECK
 
+    // init Manually
+    gCounterManualMine = 0
+    gIsOnManully = false
+    gElButtonManually.style.background = ''
+
     // init the array that return all the position in pone array.
     gAllPositions = []
 
@@ -91,6 +98,7 @@ function init() {
     gElScoreRecord.innerText = '// Best: ' + setBest()
     gElButtonHint.style.background = ''
     gElTime.innerText = 'Time: 0.00'
+    //gElGameMode.innerText = 'Game Mode: Regular'
 
     // Build the main board and render to HTML
     gBoard = buildBoard(gLevel);
@@ -177,6 +185,8 @@ function onClickManuMined(elBtn) {
 
     if (gGame.shownCount > 0) return
 
+    gElGameMode.innerText = 'Game Mode: Place Mine Manually'
+
     gGame.isOn = false
     gIsOnManully = true
 
@@ -192,7 +202,6 @@ function onClickManuMined(elBtn) {
 }
 
 function ManuallyPosdMines(elCell, i, j) {
-    console.log('ManuallyPosdMines');
 
     if (gGame.isOn) return
     if (gCounterManualMine >= gLevel.mine) return gIsOnManully = false
@@ -208,6 +217,10 @@ function ManuallyPosdMines(elCell, i, j) {
 }
 
 function onClickSevenBoom(elBtn) {
+
+    //if (gGame.shownCount > 0) return
+
+    gElGameMode.innerText = 'Game Mode: 7Boom!'
 
     elBtn.style.background = 'yellow'
     gIsOn7Boom = true
@@ -280,4 +293,9 @@ function setBest() {
             }
         }
     }
+}
+
+function onClickGameMode() {
+    gElGameMode.innerText = 'Game Mode: Regular'
+
 }

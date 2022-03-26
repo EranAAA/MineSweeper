@@ -68,6 +68,20 @@ p {
   padding-right: 25px;
 }
 
+.gameMode {
+  padding-top: 5px;
+  padding-bottom: 10px;
+  display: inline-block;
+  font-size: 18px;
+  /* margin-right: 120px; */
+  height: 20px;
+  /* width: 100px; */
+  padding-left: 25px;
+  padding-right: 25px;
+  color: #103059;
+  font-weight: bold;
+}
+
 .restartBtn,
 .undoBtn,
 .safeCheckBtn,
@@ -85,10 +99,11 @@ p {
   font-size: 30px;
   cursor: pointer;
   color: orange;
+  border-radius: 10%;
 }
 
 .board-container {
-  padding-top: 75px;
+  padding-top: 110px;
   background-image: linear-gradient(white, lightskyblue);
 }
 

@@ -65,6 +65,7 @@ function cellClicked(evBtn, elCell, i, j) {
         // if the player have negs around him we show only the pressed cell
     } else if (gBoard[i][j].minesAroundCount > 0) {
         gGame.shownCount++
+        console.log('minesAroundCount > 0 ', gGame.shownCount);
         // Update Model
         gBoard[i][j].isShown = true
         // Update DOM
@@ -75,7 +76,9 @@ function cellClicked(evBtn, elCell, i, j) {
         if (checkGameOver()) gGame.isOn = false
         // if we press on cell that not have negs so we need to open first degree negs.
     } else if (gBoard[i][j].minesAroundCount === 0) {
+        if (gBoard[i][j].isShown) return
         gGame.shownCount++
+        console.log('minesAroundCount === 0 ', gGame.shownCount);
         // Update Model
         gBoard[i][j].isShown = true
         // Update DOM
@@ -96,6 +99,8 @@ function cellMarked(elCell, i, j) {
         renderCell({ i: i, j: j }, FLAG, 'hideCell')
 
         gGame.markedCount++
+        console.log('cellMarked:WINDOW ++', gGame.markedCount);
+
         // Record the step for Undo button
         undoRecord()
     }
@@ -106,6 +111,8 @@ function cellMarked(elCell, i, j) {
         renderCell({ i: i, j: j }, WINDOW, 'hideCell')
 
         gGame.markedCount--
+        console.log('cellMarked:else --', gGame.markedCount);
+
         // Record the step for Undo button
         undoRecord()
     }
@@ -126,12 +133,15 @@ function showAllMines(row, col) {
                 renderCell({ i: i, j: j }, EXPLODE, 'showCell')
             } else if (gBoard[i][j].isMarked) {
                 gGame.shownCount++
+                console.log('showAllMines:isMarked ', gGame.shownCount);
+
                 // Update Model
                 gBoard[i][j].isShown = true
                 // Update DOM
                 renderCell({ i: i, j: j }, FLAG_ON_MINE, 'showCell')
             } else if (gBoard[i][j].isMine) {
                 gGame.shownCount++
+                console.log('showAllMines:isMine ', gGame.shownCount);
                 // Update Model
                 gBoard[i][j].isShown = true
                 // Update DOM
@@ -150,6 +160,7 @@ function showCellsAround(i, j, positions) {
         if (gBoard[pos.i][pos.j].isShown) continue
         if (gBoard[pos.i][pos.j].isMarked) continue
         gGame.shownCount++
+        console.log('minesAroundCount === 0 Recursion', gGame.shownCount);
         // Update Model
         gBoard[pos.i][pos.j].isShown = true
         // Update DOM
@@ -189,6 +200,8 @@ function keepLiving(i, j) {
     gGame.lives--
     // counter
     gGame.shownCount++
+    console.log('keepLiving ', gGame.shownCount);
+
 
     // Update Model
     gBoard[i][j].isShown = true
