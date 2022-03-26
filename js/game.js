@@ -346,45 +346,45 @@ function undoRecord() {
 }
 // NEED TO FIX //
 function onClickUndo() {
-    gUndo.splice(0, 1, gInitBoard)
+    // gUndo.splice(0, 1, gInitBoard)
 
-    if (gCounterForUndo === 1) {
-        //debugger
-        renderBoardUndo(gInitBoard, '.board-container')
+    // if (gCounterForUndo === 1) {
+    //     //debugger
+    //     renderBoardUndo(gInitBoard, '.board-container')
 
-        gBoard = gInitBoard
+    //     gBoard = gInitBoard
 
-        gGame.isOn = true
-        gGame.shownCount = 0
-        gGame.markedCount = 0
-        gGame.secsPassed = gUndoProperties[0].secsPassed
-        gGame.lives = LIVES
-        gGame.hints = HINTS
-        gGame.isHint = false
-        gGame.safeCheck = SAFE_CHECK
+    //     gGame.isOn = true
+    //     gGame.shownCount = 0
+    //     gGame.markedCount = 0
+    //     gGame.secsPassed = gUndoProperties[0].secsPassed
+    //     gGame.lives = LIVES
+    //     gGame.hints = HINTS
+    //     gGame.isHint = false
+    //     gGame.safeCheck = SAFE_CHECK
 
-        //gUndo.splice(gUndo.length - 1, 1)
-        gUndo = []
-        gUndo.push(gInitBoard)
-        gUndoProperties.splice(gUndoProperties.length - 1, 1)
-        gCounterForUndo--
-        console.log('*******gCounterForUndo********', gCounterForUndo);
+    //     //gUndo.splice(gUndo.length - 1, 1)
+    //     gUndo = []
+    //     gUndo.push(gInitBoard)
+    //     gUndoProperties.splice(gUndoProperties.length - 1, 1)
+    //     gCounterForUndo--
+    //     console.log('*******gCounterForUndo********', gCounterForUndo);
 
-    } else if (gCounterForUndo === 0) {
-        return
-    } else {
-        //debugger
-        gBoard = gUndo[gUndo.length - 2]
-        renderBoardUndo(gBoard, '.board-container');
+    // } else if (gCounterForUndo === 0) {
+    //     return
+    // } else {
+    //     //debugger
+    //     gBoard = gUndo[gUndo.length - 2]
+    //     renderBoardUndo(gBoard, '.board-container');
 
-        gGame = gUndoProperties[gUndo.length - 1]
-        console.log(gUndoProperties);
-        console.log(gGame);
+    //     gGame = gUndoProperties[gUndo.length - 1]
+    //     console.log(gUndoProperties);
+    //     console.log(gGame);
 
-        gUndo.splice(gUndo.length - 1, 1)
-        gUndoProperties.splice(gUndoProperties.length - 1, 1)
-        gCounterForUndo--
-        console.log('*******gCounterForUndo********', gCounterForUndo);
+    //     gUndo.splice(gUndo.length - 1, 1)
+    //     gUndoProperties.splice(gUndoProperties.length - 1, 1)
+    //     gCounterForUndo--
+    //     console.log('*******gCounterForUndo********', gCounterForUndo);
 
-    }
+    // }
 }
