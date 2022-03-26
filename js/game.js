@@ -10,7 +10,6 @@ var gTimer // ******Check if i use it.******
 
 // For Undo Button
 var gInitBoard = []
-var gCounterForUndo = 0
 var gisInUndo = false
 
 // For Recursion
@@ -33,7 +32,7 @@ function cellClicked(evBtn, elCell, i, j) {
         setMinesNegsCount(gBoard) // placeing the count of negs around
         printBoard(gBoard) // Render the board
         undoRecord() // Record the first Default board for Undo button
-        gCounterForUndo-- // To prevent counting duplicate.. happen only in first press
+        //gCounterForUndo-- // To prevent counting duplicate.. happen only in first press
         gInitBoard = CopyMat(gBoard) // Global that keep the Original Board.
     }
 
@@ -47,6 +46,7 @@ function cellClicked(evBtn, elCell, i, j) {
 
     // Start the time when the game beggin
     gGame.secsPassed = (gGame.secsPassed) ? gGame.secsPassed : Date.now()
+    gTimer = gGame.secsPassed
     // Hsow time every 50 mili
     gTimeInterval = setInterval(() => displayTimer(), 50);
 
@@ -166,10 +166,6 @@ function showCellsAround(i, j, positions) {
         // Update DOM
         renderCell({ i: pos.i, j: pos.j }, gBoard[pos.i][pos.j].minesAroundCount, 'showCell')
     }
-    // Record the step for Undo button
-    undoRecord()
-
-    ////////////////////////////////////////
 
     var gCellsRecursion = []
     for (const pos of positions) {
@@ -179,19 +175,16 @@ function showCellsAround(i, j, positions) {
         for (let i = 0; i < cells.length; i++) {
             gCellsRecursion.push(cells[i])
         }
-        //debugger
         console.log(gCellsRecursion);
     }
 
     if (gCellsRecursion.length) {
-        //debugger
         showCellsAround(i, j, gCellsRecursion)
+    } else {
+        // Record the step for Undo button
+        undoRecord()
+        if (checkGameOver()) gGame.isOn = false
     }
-
-    ////////////////////////////////////////
-
-    if (checkGameOver()) gGame.isOn = false
-
 }
 
 // Keep the player live.
@@ -320,10 +313,7 @@ function recordBestScore() {
     }
 }
 
-// NEED TO FIX //
 function undoRecord() {
-
-    gisInUndo = true
 
     var copy = CopyMat(gBoard)
     gUndo.push(copy)
@@ -339,52 +329,38 @@ function undoRecord() {
         isHint: gGame.isHint
     })
 
-    gCounterForUndo++
-    console.log('*******Counter For Undo********', gCounterForUndo);
-    gisInUndo = false
-
+    console.log('<<<<<< gUndo >>>>>>', gUndo);
+    console.log('<<<<<< gUndoProperties >>>>>>', gUndoProperties);
 }
-// NEED TO FIX //
+
 function onClickUndo() {
-    // gUndo.splice(0, 1, gInitBoard)
+    //debugger
+    if (gUndo.length === 1) return
+    if (gUndo.length === 2) return init()
 
-    // if (gCounterForUndo === 1) {
-    //     //debugger
-    //     renderBoardUndo(gInitBoard, '.board-container')
-
-    //     gBoard = gInitBoard
-
-    //     gGame.isOn = true
-    //     gGame.shownCount = 0
-    //     gGame.markedCount = 0
-    //     gGame.secsPassed = gUndoProperties[0].secsPassed
-    //     gGame.lives = LIVES
-    //     gGame.hints = HINTS
-    //     gGame.isHint = false
-    //     gGame.safeCheck = SAFE_CHECK
-
-    //     //gUndo.splice(gUndo.length - 1, 1)
-    //     gUndo = []
-    //     gUndo.push(gInitBoard)
-    //     gUndoProperties.splice(gUndoProperties.length - 1, 1)
-    //     gCounterForUndo--
-    //     console.log('*******gCounterForUndo********', gCounterForUndo);
-
-    // } else if (gCounterForUndo === 0) {
-    //     return
-    // } else {
-    //     //debugger
-    //     gBoard = gUndo[gUndo.length - 2]
-    //     renderBoardUndo(gBoard, '.board-container');
-
-    //     gGame = gUndoProperties[gUndo.length - 1]
-    //     console.log(gUndoProperties);
-    //     console.log(gGame);
-
-    //     gUndo.splice(gUndo.length - 1, 1)
-    //     gUndoProperties.splice(gUndoProperties.length - 1, 1)
-    //     gCounterForUndo--
-    //     console.log('*******gCounterForUndo********', gCounterForUndo);
-
+    // for (let i = 0; i < gUndo.length; i++) {
+    //     gUndo[0][i].minesAroundCount = 0
+    //     gUndo[0][i].isShown = false
+    //     gUndo[0][i].isMine = false
+    //     gUndo[0][i].isMarked = false
     // }
+
+    // gUndoProperties[0].isOn = true
+    // gUndoProperties[0].shownCount = 0
+    // gUndoProperties[0].markedCount = 0
+    // gUndoProperties[0].secsPassed = gTimer
+    // gUndoProperties[0].lives = 3
+    // gUndoProperties[0].hints = 3
+    // gUndoProperties[0].safeCheck = 3
+    // gUndoProperties[0].isHint = false
+
+    gUndo.splice(gUndo.length - 1, 1)
+    gUndoProperties.splice(gUndo.length - 1, 1)
+
+    gBoard = gUndo[gUndo.length - 1]
+
+    renderBoardUndo(gBoard, '.board-container');
+
+    gGame = gUndoProperties[gUndo.length - 1]
+    displayTimer()
 }
