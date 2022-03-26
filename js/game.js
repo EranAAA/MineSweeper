@@ -228,6 +228,8 @@ function hintShow(i, j) {
     // Get Cells
     var hintCells = getNeighbors(gBoard, i, j)
 
+    hintCells.push({ i: i, j: j })
+
     for (const cell of hintCells) {
         if (gBoard[cell.i][cell.j].isShown) {
             continue
