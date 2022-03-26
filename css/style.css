@@ -104,8 +104,12 @@ p {
 
 .safeCheckBtn span {
   color: black;
-  font-size: 13px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  opacity: 0.8;
+  font-size: 14px;
+  font-family: Impact;
+  /* box-sizing: border-box; */
+  display: inline-block;
+  width: 40px;
 }
 
 .board-container {
